@@ -1,9 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MalihaPolyTex.Institute.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace MalihaPolyTex.Institute.Contexts
 {
@@ -29,7 +25,29 @@ namespace MalihaPolyTex.Institute.Contexts
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Department>()
+                .HasMany(s => s.Students)
+                .WithOne(d => d.Department);
+
+            modelBuilder.Entity<StudentRegistration>()
+                .HasKey(sc => new { sc.StudentId, sc.CourseId });
+
+            modelBuilder.Entity<StudentRegistration>()
+                .HasOne(cs => cs.Course)
+                .WithMany(c => c.EnrolledStudents)
+                .HasForeignKey(fk => fk.CourseId);
+
+            modelBuilder.Entity<StudentRegistration>()
+                .HasOne(sc => sc.Student)
+                .WithMany(s => s.EnrolledCourses)
+                .HasForeignKey(fk => fk.StudentId);
+
             base.OnModelCreating(modelBuilder);
         }
+
+        public DbSet<StudentRegistration> Registration { get; set; }
+        public DbSet<Course> Courses { get; set; }
+        public DbSet<Student> Students { get; set; }
+        public DbSet<Department> Departments { get; set; }
     }
 }

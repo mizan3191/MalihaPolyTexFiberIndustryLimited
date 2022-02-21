@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MalihaPolyTex.Institute.BusinessObjects;
+using MalihaPolyTex.Web.Models;
 
 namespace MalihaPolyTex.Web.Profiles
 {
@@ -7,7 +8,7 @@ namespace MalihaPolyTex.Web.Profiles
     {
         public WebProfile()
         {
-            //CreateMap<Student, Student>().ReverseMap();
+            CreateMap<Student, StudentCreateModel>().ReverseMap();
         }
     }
 }

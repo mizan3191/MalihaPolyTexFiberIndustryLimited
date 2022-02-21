@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using MalihaPolyTex.Web.Models;
 
 namespace MalihaPolyTex.Web
 {
@@ -6,6 +7,9 @@ namespace MalihaPolyTex.Web
     {
         protected override void Load(ContainerBuilder builder)
         {
+            builder.RegisterType<StudentCreateModel>().AsSelf();
+            builder.RegisterType<CourseCreateModel>().AsSelf();
+
             base.Load(builder);
         }
     }

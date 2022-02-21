@@ -1,9 +1,4 @@
 ﻿using DevSkill.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MalihaPolyTex.Institute.Entities
 {
@@ -13,6 +8,8 @@ namespace MalihaPolyTex.Institute.Entities
         public int StudentId { get; set; }
         public int CourseId { get; set; }
         public int EnrollDate { get; set; }
+        public Student Student { get; set; }
+        public Course Course { get; set; }
         public bool IsPaymentComplete { get; set; }
     }
 }
