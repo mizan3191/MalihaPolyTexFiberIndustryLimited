@@ -2,6 +2,7 @@
 using MalihaPolyTex.Institute.Services;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace MalihaPolyTex.Web.Models
 {
@@ -27,9 +28,9 @@ namespace MalihaPolyTex.Web.Models
 
         }
 
-        internal object GetStudentList(DataTablesAjaxRequestModel ajax)
+        internal async Task< object> GetStudentListAsync(DataTablesAjaxRequestModel ajax)
         {
-            var data = _service.GetStudent(
+            var data = await _service.GetStudentAsync(
                ajax.PageIndex,
                ajax.PageSize,
                ajax.SearchText,
@@ -49,6 +50,11 @@ namespace MalihaPolyTex.Web.Models
                         }
                     ).ToArray()
             };
+        }
+
+        internal async Task DeleteAsync(int id)
+        {
+            await _service.DeleteStudentAsync(id);
         }
     }
 }

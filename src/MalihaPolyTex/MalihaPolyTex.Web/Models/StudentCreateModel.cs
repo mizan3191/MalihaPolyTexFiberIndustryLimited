@@ -2,6 +2,7 @@
 using MalihaPolyTex.Institute.BusinessObjects;
 using MalihaPolyTex.Institute.Services;
 using System;
+using System.Threading.Tasks;
 
 namespace MalihaPolyTex.Web.Models
 {
@@ -32,7 +33,7 @@ namespace MalihaPolyTex.Web.Models
 
         }
 
-        internal void CreateStudent()
+        internal async Task CreateStudentAsync()
         {
             var student = new Student()
             {
@@ -41,7 +42,7 @@ namespace MalihaPolyTex.Web.Models
                 DepartmentId = DepartmentId
             };
 
-            _service.CreateStudent(student);
+            await _service.CreateStudentAsync(student);
         }
     }
 }

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Threading.Tasks;
 
 namespace MalihaPolyTex.Web.Controllers
 {
@@ -30,11 +31,11 @@ namespace MalihaPolyTex.Web.Controllers
             return View(model);
         }
 
-        public JsonResult GetData()
+        public async Task< JsonResult> GetData()
         {
             var model = _scope.Resolve<StudentDataModel>();
             var dataTable = new DataTablesAjaxRequestModel(Request);
-            var data = model.GetStudentList(dataTable);
+            var data = await model.GetStudentListAsync(dataTable);
             return Json(data);
         }
 
@@ -47,15 +48,14 @@ namespace MalihaPolyTex.Web.Controllers
         }
 
         [HttpPost, ValidateAntiForgeryToken]
-        public ActionResult Create(StudentCreateModel model)
+        public async Task<ActionResult> Create(StudentCreateModel model)
         {
             if (ModelState.IsValid)
             {
-                model.Resolve(_scope);
-
                 try
                 {
-                    model.CreateStudent();
+                    model.Resolve(_scope);
+                    await model.CreateStudentAsync();
                 }
                 catch(Exception ex)
                 {
@@ -63,45 +63,65 @@ namespace MalihaPolyTex.Web.Controllers
                 }
             }
 
+            return RedirectToAction(nameof(Data));
+        }
+
+        public async Task<ActionResult> Edit(int id)
+        {
+            var model = _scope.Resolve<StudentEditModel>();
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    await model.LoadStudentAsync(id);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Student doesn't  load");
+                }
+            }
+
             return View(model);
         }
 
-        public ActionResult Edit(int id)
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task< ActionResult> Edit(StudentEditModel model)
         {
-            return View();
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    model.Resolve(_scope);
+                    await model.UpdateAsync();
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Student doesn't exist");
+                }
+            }
+
+            return RedirectToAction(nameof(Data));
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<ActionResult> Delete(int id)
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
+            var model = _scope.Resolve<StudentDataModel>();
 
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    model.Resolve(_scope);
+                    await model.DeleteAsync(id);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Student doesn't exist");
+                }
+            }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            return RedirectToAction(nameof(Data));
         }
     }
 }
