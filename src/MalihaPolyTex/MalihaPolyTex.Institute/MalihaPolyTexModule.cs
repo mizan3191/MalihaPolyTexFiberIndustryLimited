@@ -33,9 +33,11 @@ namespace MalihaPolyTex.Institute
             builder.RegisterType<StudentService>().As<IStudentService>().InstancePerLifetimeScope();
             builder.RegisterType<CourseService>().As<ICourseService>().InstancePerLifetimeScope();
             builder.RegisterType<DepartmentService>().As<IDepartmentService>().InstancePerLifetimeScope();
+
             builder.RegisterType<CourseRepository>().As<ICourseRepository>().InstancePerLifetimeScope();
             builder.RegisterType<DepartmentRepository>().As<IDepartmentRepository>().InstancePerLifetimeScope();
             builder.RegisterType<StudentRepository>().As<IStudentRepository>().InstancePerLifetimeScope();
+
             builder.RegisterType<MalihaPolyTexUnitOfWork>().As<IMalihaPolyTexUnitOfWork>().InstancePerLifetimeScope();
 
             base.Load(builder);

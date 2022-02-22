@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using MalihaPolyTex.Institute.BusinessObjects;
 using MalihaPolyTex.Institute.Services;
 using System;
 
@@ -7,7 +8,7 @@ namespace MalihaPolyTex.Web.Models
     public class StudentCreateModel
     {
         public int Id { get; set; }
-        public int DeptId { get; set; }
+        public int DepartmentId { get; set; }
         public string Name { get; set; }
         public DateTime DateOfBirth { get; set; }
 
@@ -29,6 +30,18 @@ namespace MalihaPolyTex.Web.Models
         public StudentCreateModel()
         {
 
+        }
+
+        internal void CreateStudent()
+        {
+            var student = new Student()
+            {
+                Name = Name,
+                DateOfBirth = DateOfBirth,
+                DepartmentId = DepartmentId
+            };
+
+            _service.CreateStudent(student);
         }
     }
 }

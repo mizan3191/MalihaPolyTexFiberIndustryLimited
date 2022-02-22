@@ -24,9 +24,18 @@ namespace MalihaPolyTex.Web.Controllers
             return View();
         }
 
-        public ActionResult Details(int id)
+        public ActionResult Data()
         {
-            return View();
+            var model = _scope.Resolve<StudentDataModel>();
+            return View(model);
+        }
+
+        public JsonResult GetData()
+        {
+            var model = _scope.Resolve<StudentDataModel>();
+            var dataTable = new DataTablesAjaxRequestModel(Request);
+            var data = model.GetStudentList(dataTable);
+            return Json(data);
         }
 
         public ActionResult Create()
@@ -46,7 +55,7 @@ namespace MalihaPolyTex.Web.Controllers
 
                 try
                 {
-                    return RedirectToAction(nameof(Index));
+                    model.CreateStudent();
                 }
                 catch(Exception ex)
                 {
@@ -54,7 +63,7 @@ namespace MalihaPolyTex.Web.Controllers
                 }
             }
 
-            return View();
+            return View(model);
         }
 
         public ActionResult Edit(int id)

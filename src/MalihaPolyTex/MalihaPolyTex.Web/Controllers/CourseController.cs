@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Threading.Tasks;
 
 namespace MalihaPolyTex.Web.Controllers
 {
@@ -22,10 +23,21 @@ namespace MalihaPolyTex.Web.Controllers
         {
             return View();
         }
-
-        public ActionResult Details(int id)
+        
+        public ActionResult Data()
         {
-            return View();
+            var model = _scope.Resolve<CourseDataModel>();
+            return View(model);
+        }
+
+        public async Task<JsonResult> GetData()
+        {
+            var dataTable = new DataTablesAjaxRequestModel(Request);
+            var model = _scope.Resolve<CourseDataModel>();
+            model.Resolve(_scope);
+            var data = await model.GetCourseListAsync(dataTable);
+
+            return Json(data);
         }
 
         public ActionResult Create()
