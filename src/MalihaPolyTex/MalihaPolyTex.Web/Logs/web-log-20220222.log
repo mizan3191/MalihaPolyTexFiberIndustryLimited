@@ -61,3 +61,37 @@ System.InvalidOperationException: The view 'Edit' was not found. The following l
 2022-02-22 01:51:45.366 -08:00 [INF] Application Starting up
 2022-02-22 01:55:25.382 -08:00 [INF] Application Starting up
 2022-02-22 02:15:06.521 -08:00 [INF] Application Starting up
+2022-02-22 08:27:54.445 -08:00 [INF] Application Starting up
+2022-02-22 08:30:11.155 -08:00 [INF] Application Starting up
+2022-02-22 08:33:50.532 -08:00 [INF] Application Starting up
+2022-02-22 08:47:59.357 -08:00 [INF] Application Starting up
+2022-02-22 08:48:09.731 -08:00 [ERR] The view 'Create' was not found. Searched locations: ["/Views/Course/Create.cshtml","/Views/Shared/Create.cshtml","/Pages/Shared/Create.cshtml"]
+2022-02-22 08:48:09.754 -08:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: The view 'Create' was not found. The following locations were searched:
+/Views/Course/Create.cshtml
+/Views/Shared/Create.cshtml
+/Pages/Shared/Create.cshtml
+   at Microsoft.AspNetCore.Mvc.ViewEngines.ViewEngineResult.EnsureSuccessful(IEnumerable`1 originalLocations)
+   at Microsoft.AspNetCore.Mvc.ViewFeatures.ViewResultExecutor.ExecuteAsync(ActionContext context, ViewResult result)
+   at Microsoft.AspNetCore.Mvc.ViewResult.ExecuteResultAsync(ActionContext context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResultFilterAsync>g__Awaited|29_0[TFilter,TFilterAsync](ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResultExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.ResultNext[TFilter,TFilterAsync](State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeResultFilters()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|24_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeFilterPipelineAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Session.SessionMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Session.SessionMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore.MigrationsEndPointMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+2022-02-22 08:52:50.150 -08:00 [INF] Application Starting up
+2022-02-22 09:51:39.627 -08:00 [INF] Application Starting up
+2022-02-22 10:02:31.491 -08:00 [INF] Application Starting up

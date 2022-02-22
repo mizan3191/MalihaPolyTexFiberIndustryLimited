@@ -1,11 +1,14 @@
-﻿
+﻿@model StudentDataModel
+
 @{
+   Layout = "_Layout";
+
     ViewData["Title"] = "Data";
 }
 
 
 @section Styles {
-    <link rel="stylesheet" href="/mazer/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="/admin/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
 }
 
 <section class="content">
@@ -47,8 +50,8 @@
 
 
 @section Scripts{
-    <script src="/mazer/plugins/datatables/jquery.dataTables.min.js"></script>
-    <script src="/mazer/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="/admin/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="/admin/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
     <script>
         $(function () {
             $("#DataTable").DataTable({

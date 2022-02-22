@@ -1,6 +1,5 @@
 ﻿using Autofac;
 using MalihaPolyTex.Web.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -17,11 +16,6 @@ namespace MalihaPolyTex.Web.Controllers
         {
             _scope = scope;
             _logger = logger;
-        }
-
-        public ActionResult Index()
-        {
-            return View();
         }
         
         public ActionResult Data()
@@ -49,13 +43,14 @@ namespace MalihaPolyTex.Web.Controllers
         }
 
         [HttpPost, ValidateAntiForgeryToken]
-        public ActionResult Create(CourseCreateModel model)
+        public async Task< ActionResult> Create(CourseCreateModel model)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    return RedirectToAction(nameof(Index));
+                    model.Resolve(_scope);
+                    await model.CreateAsync();
                 }
                 catch(Exception ex)
                 {
@@ -64,31 +59,64 @@ namespace MalihaPolyTex.Web.Controllers
                 }
             }
 
-            return View();
-
+            return RedirectToAction(nameof(Data));
         }
 
-        public ActionResult Edit(int id)
+        public async Task<ActionResult> Edit(int id)
         {
-            return View();
+            var model = _scope.Resolve<CourseEditModel>();
+
+            if (ModelState.IsValid)
+            {
+                try 
+                {
+                    await model.LoadCourseAsync(id);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Course id doesn't load");
+                }
+            }
+
+            return View(model);
         }
 
         [HttpPost, ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<ActionResult> Edit(CourseEditModel model)
         {
-            try
+            if (ModelState.IsValid)
             {
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    model.Resolve(_scope);
+                    await model.UpdateAsync();
+                }
+                catch(Exception ex)
+                {
+                    _logger.LogError(ex, "Course not updated");
+                }
             }
-            catch
-            {
-                return View();
-            }
+
+            return RedirectToAction(nameof(Data));
         }
 
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
-            return View();
+            var model = _scope.Resolve<CourseCreateModel>();
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    await model.DeleteAsync(id);
+                }
+                catch(Exception ex)
+                {
+                    _logger.LogError(ex, "Course doesn't delete");
+                }
+            }
+
+            return RedirectToAction(nameof(Data));
         }
     }
 }
