@@ -1,0 +1,58 @@
+﻿@model FormModel
+@{
+    ViewData["Title"] = "View Form";
+}
+
+<section class="bootstrap-select">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Check</h4>
+                </div>
+                <div class="card-content">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <h6>Student Name</h6>
+                                <fieldset class="form-group" id="studentDropdown">
+                                    <select class="form-control" id="studentId" asp-items="@ViewBag.messagestudent"></select>
+                                </fieldset>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <h6>Department Name</h6>
+                                <fieldset disabled>
+                                   <div class="form-group">
+                                       <input type="text" id="disabledTextInput" class="form-control" 
+                                       placeholder="--Department--">
+                                   </div>
+                               </fieldset>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <h6>Course Name</h6>
+                                <fieldset class="form-group" id="courseDropdown">
+                                    <select class="form-control" id="courseId" asp-items="@ViewBag.messageCourse"></select>
+                                </fieldset>
+                                </>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <h6>Payment Status</h6>
+                                <fieldset disabled>
+                                   <div class="form-group">
+                                       <input type="text" id="disabledTextInput" class="form-control" 
+                                       placeholder="--Payment--">
+                                   </div>
+                               </fieldset>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

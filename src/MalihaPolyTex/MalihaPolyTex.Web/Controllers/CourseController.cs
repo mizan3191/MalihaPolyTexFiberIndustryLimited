@@ -1,5 +1,6 @@
 ﻿using Autofac;
-using MalihaPolyTex.Web.Models;
+using MalihaPolyTex.Academy.Utilities;
+using MalihaPolyTex.Web.Models.CourseModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -12,69 +13,61 @@ namespace MalihaPolyTex.Web.Controllers
         private readonly ILifetimeScope _scope;
         private readonly ILogger<CourseController> _logger;
 
-        public CourseController(ILifetimeScope scope, ILogger<CourseController> logger)
+        public CourseController(ILogger<CourseController> logger, ILifetimeScope scope)
         {
             _scope = scope;
             _logger = logger;
         }
-        
-        public ActionResult Data()
+        public IActionResult Create()
         {
-            var model = _scope.Resolve<CourseDataModel>();
+            var model = _scope.Resolve<CreateCourseModel>();
             return View(model);
         }
 
-        public async Task<JsonResult> GetData()
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(CreateCourseModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                model.Resolve(_scope);
+
+                try
+                {
+                    await model.CreateCourseAsync();
+                }
+                catch(Exception ex)
+                {
+                    _logger.LogError(ex, "Course dosen't create.");
+                }
+            }
+            return View(model);
+        }
+        public IActionResult Data()
+        {
+            var model = _scope.Resolve<DataCourseModel>();
+            return View(model);
+        }
+        public async Task<JsonResult> GetCourseData()
         {
             var dataTable = new DataTablesAjaxRequestModel(Request);
-            var model = _scope.Resolve<CourseDataModel>();
-            model.Resolve(_scope);
-            var data = await model.GetCourseListAsync(dataTable);
+            var model = _scope.Resolve<DataCourseModel>();
+            var data = await model.CourseListAsync(dataTable);
 
             return Json(data);
         }
-
-        public ActionResult Create()
+        public async Task<IActionResult> Edit(int id)
         {
-            var model = _scope.Resolve<CourseCreateModel>();
-            model.Resolve(_scope);
+            var model = _scope.Resolve<EditCourseModel>();
 
-            return View(model);
-        }
-
-        [HttpPost, ValidateAntiForgeryToken]
-        public async Task< ActionResult> Create(CourseCreateModel model)
-        {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    model.Resolve(_scope);
-                    await model.CreateAsync();
-                }
-                catch(Exception ex)
-                {
-                    _logger.LogError(ex, "Course not created");
-
-                }
-            }
-
-            return RedirectToAction(nameof(Data));
-        }
-
-        public async Task<ActionResult> Edit(int id)
-        {
-            var model = _scope.Resolve<CourseEditModel>();
-
-            if (ModelState.IsValid)
-            {
-                try 
-                {
-                    await model.LoadCourseAsync(id);
+                    await model.LoadCourseDataAsync(id);
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, "Course id doesn't load");
+                    _logger.LogError(ex, "Course dosen't Load.");
                 }
             }
 
@@ -82,40 +75,21 @@ namespace MalihaPolyTex.Web.Controllers
         }
 
         [HttpPost, ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(CourseEditModel model)
+        public async Task<IActionResult> Edit(EditCourseModel model)
         {
             if (ModelState.IsValid)
             {
-                try
-                {
-                    model.Resolve(_scope);
-                    await model.UpdateAsync();
-                }
-                catch(Exception ex)
-                {
-                    _logger.LogError(ex, "Course not updated");
-                }
+                model.Resolve(_scope);
+                await model.UpdateCourseAsync();
             }
-
             return RedirectToAction(nameof(Data));
         }
 
-        public async Task<ActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var model = _scope.Resolve<CourseCreateModel>();
+            var model = _scope.Resolve<DataCourseModel>();
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    await model.DeleteAsync(id);
-                }
-                catch(Exception ex)
-                {
-                    _logger.LogError(ex, "Course doesn't delete");
-                }
-            }
-
+            await model.DeleteCourseAsync(id);
             return RedirectToAction(nameof(Data));
         }
     }

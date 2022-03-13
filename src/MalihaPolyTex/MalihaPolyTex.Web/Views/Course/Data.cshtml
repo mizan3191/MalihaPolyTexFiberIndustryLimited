@@ -1,26 +1,47 @@
-﻿@model CourseDataModel
-
+﻿@model DataCourseModel
 @{
-    ViewData["Title"] = "Course Table";
+    ViewData["Title"] = "Data Table";
 }
 
 @section Styles
 {
-    <link rel="stylesheet" href="/admin/plugins/datatables-bs4/css/dataTables.bootstrap4.css">
+    <link rel="stylesheet" href="/Admin/plugins/datatables-bs4/css/dataTables.bootstrap4.css">
 }
+
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Course Data</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item active">Courses</li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
 
 <!-- Main content -->
 <section class="content">
     <div class="row">
         <div class="col-12">
             <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">All Available Courses</h3>
+                </div>
+                <!-- /.card-header -->
                 <div class="card-body">
-                    <table id="courses" class="table table-bordered table-hover">
+                    <table id="course" class="table table-bordered table-hover">
                         <thead>
                             <tr>
                                 <th>Title</th>
                                 <th>Fee</th>
-                                <th>SeatCount</th>
+                                <th>Seat Count</th>
                                 <th style="width:200px">Action</th>
                             </tr>
                         </thead>
@@ -28,12 +49,12 @@
                             <tr>
                                 <th>Title</th>
                                 <th>Fee</th>
-                                <th>SeatCount</th>
+                                <th>Seat Count</th>
                                 <th>Action</th>
                             </tr>
                         </tfoot>
-                        <partial name="_DeletePopupPartial"/>
                     </table>
+                    <partial name="_DeletePopupPartial" />
                 </div>
             </div>
         </div>
@@ -42,15 +63,15 @@
 
 @section Scripts
 {
-    <script src="/admin/plugins/datatables/jquery.dataTables.js"></script>
-    <script src="/admin/plugins/datatables-bs4/js/dataTables.bootstrap4.js"></script>
+    <script src="/Admin/plugins/datatables/jquery.dataTables.js"></script>
+    <script src="/Admin/plugins/datatables-bs4/js/dataTables.bootstrap4.js"></script>
     <script>
         $(function ()
         {
-            $('#courses').DataTable({
+            $('#course').DataTable({
                 "processing": true,
                 "serverSide": true,
-                "ajax": "/Course/GetData",
+                "ajax": "/Course/GetCourseData",
                 "columnDefs": [
                     {
                         "orderable": false,
@@ -71,14 +92,16 @@
                 ]
                 
             });
-            $('#courses').on('click', '.show-bs-modal', function (event) {
+
+            $('#course').on('click', '.show-bs-modal', function (event) {
                 var id = $(this).data("id");
                 var modal = $("#modal-default");
                 modal.find('.modal-body p').text('Are you sure you want to delete this record?')
                 $("#deleteId").val(id);
-                $("#deleteForm").attr("action", "/Course/delete")
+                $("#deleteForm").attr("action", "/Course/Delete")
                 modal.modal('show');
             });
+
             $("#deleteButton").click(function () {
                 $("#deleteForm").submit();
             });

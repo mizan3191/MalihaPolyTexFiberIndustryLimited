@@ -1,6 +1,7 @@
 ﻿using Autofac;
+using MalihaPolyTex.Academy.Utilities;
 using MalihaPolyTex.Web.Models;
-using Microsoft.AspNetCore.Http;
+using MalihaPolyTex.Web.Models.StudentModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -13,42 +14,19 @@ namespace MalihaPolyTex.Web.Controllers
         private readonly ILifetimeScope _scope;
         private readonly ILogger<StudentController> _logger;
 
-        public StudentController(ILifetimeScope scope,
-            ILogger<StudentController> logger)
+        public StudentController(ILogger<StudentController> logger, ILifetimeScope scope)
         {
             _scope = scope;
             _logger = logger;
         }
-
-        public ActionResult Index()
+        public IActionResult Create()
         {
+            var model = _scope.Resolve<CreateStudentModel>();
+            model.A();
             return View();
         }
-
-        public ActionResult Data()
-        {
-            var model = _scope.Resolve<StudentDataModel>();
-            return View(model);
-        }
-
-        public async Task< JsonResult> GetData()
-        {
-            var model = _scope.Resolve<StudentDataModel>();
-            var dataTable = new DataTablesAjaxRequestModel(Request);
-            var data = await model.GetStudentListAsync(dataTable);
-            return Json(data);
-        }
-
-        public ActionResult Create()
-        {
-            var model = _scope.Resolve<StudentCreateModel>();
-            model.Resolve(_scope);
-
-            return View(model);
-        }
-
-        [HttpPost, ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(StudentCreateModel model)
+        [HttpPost]
+        public async Task<IActionResult> Create(CreateStudentModel model)
         {
             if (ModelState.IsValid)
             {
@@ -59,68 +37,54 @@ namespace MalihaPolyTex.Web.Controllers
                 }
                 catch(Exception ex)
                 {
-                    _logger.LogError(ex, "Student not created");
+                    _logger.LogError(ex, "Student doesn't create");
                 }
             }
-
-            return RedirectToAction(nameof(Data));
+            return View();
         }
 
-        public async Task<ActionResult> Edit(int id)
+        public IActionResult Data()
         {
-            var model = _scope.Resolve<StudentEditModel>();
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    await model.LoadStudentAsync(id);
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex, "Student doesn't  load");
-                }
-            }
-
+            var model = _scope.Resolve<DataStudentModel>();
             return View(model);
         }
 
-        [HttpPost, ValidateAntiForgeryToken]
-        public async Task< ActionResult> Edit(StudentEditModel model)
+        public async Task<JsonResult> GetStudentData()
         {
-            if (ModelState.IsValid)
+            var dataTable = new DataTablesAjaxRequestModel(Request);
+            var model = _scope.Resolve<DataStudentModel>();
+            var data = await model.StudentListAsync(dataTable);
+
+            return Json(data);
+        }
+        public async Task<IActionResult> Edit(int id)
+        {
+            var model = _scope.Resolve<EditStudentModel>();
+            await model.LoadStudentDataAsync(id);
+
+            return View(model);
+        }
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(EditStudentModel model)
+        {
+            if(ModelState.IsValid)
             {
                 try
                 {
                     model.Resolve(_scope);
-                    await model.UpdateAsync();
+                    await model.UpdateStudentAsync();
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, "Student doesn't exist");
+                    _logger.LogError(ex, "Student update failed");
                 }
             }
-
             return RedirectToAction(nameof(Data));
         }
-
-        public async Task<ActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var model = _scope.Resolve<StudentDataModel>();
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    model.Resolve(_scope);
-                    await model.DeleteAsync(id);
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex, "Student doesn't exist");
-                }
-            }
-
+            var model = _scope.Resolve<DataStudentModel>();
+            await model.DeleteStudentAsync(id);
             return RedirectToAction(nameof(Data));
         }
     }

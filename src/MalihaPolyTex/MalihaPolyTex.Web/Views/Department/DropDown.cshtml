@@ -1,0 +1,94 @@
+﻿@model FormModel
+
+@{
+    ViewData["Title"] = "DropDown";
+}
+
+  <div class="card-body">
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <label asp-for="Name" class="control-label">Student Name</label>
+                <select asp-for="Id" class="form-control" id="sId"
+                        asp-items="@(new SelectList(@ViewBag.messageStudent,"Id", "Name"))">
+                </select>
+            </div>
+            <div class="col-md-6 mb-4">
+
+                
+                <input asp-for="DeptName" class="form-control" />
+
+         @*       <select class="form-control" id="SubCategoryID" name="SubCategoryID" asp-for="DeptName"
+                            asp-items="@()"></select>*@
+
+                @*<label asp-for="DeptName" class="control-label">Department Name</label>
+                <input asp-for="DeptName" class="form-control" />
+                <span asp-validation-for="DeptName" class="text-danger"></span>
+                @*<input asp-for="DeptName" id="dId" class="form-control mb-3"  type="text" placeholder="Dept Name"/>*@
+            </div>
+        </div>
+    </div>
+
+
+@section Scripts
+{
+<script src="/Demo/lib/jquery/dist/jquery.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#sId").change(function(){
+            var studentId = $(this).val();
+            debugger
+            $.ajax({
+            type:"post",
+            url:"/Department/GetDeptName?studentId=" + studentId,
+            contentType:"html",
+            success:function(response){
+            debugger
+            $("#dId").empty();
+            $("#dId").append(response);
+            }
+            })
+        })
+    });
+</script>
+
+@*
+    <script type="text/javascript">
+    $(document).ready(function () {
+    var items = "<option value='0'>Select</option>";
+    $('#DeptID').html(items);
+    });
+    </script>
+*@
+
+@*
+    <script type="text/javascript">
+    $(document).ready(function () {
+    $('#Id').change(function () {
+    var url = '@Url.Content("~/")' + "Department/GetDeptName";
+    var ddlsource = "#Id";
+    $.getJSON(url, { Id: $(ddlsource).val() }, function (data) {
+    var items = '';
+    $("#deptID").empty();
+    $.each(data, function (i, dept) {
+    items += "<option value='" + dept.value + "'>" + dept.text + "</option>";
+    });
+    $('#deptID').html(items);
+    });
+    });
+
+    $('#SubCategoryID').change(function () {
+    var url = '@Url.Content("~/")' + "Demo/GetProducts";
+    var ddlsource = "#SubCategoryID";
+    $.getJSON(url, { SubCategoryID: $(ddlsource).val() }, function (data) {
+    var items = '';
+    $('#ProductID').empty();
+    $.each(data, function (i, product) {
+    items += "<option value='" + product.value + "'>" + product.text + "</option>";
+    });
+    $('#ProductID').html(items);
+    });
+    });
+    });
+    </script>*@
+}
